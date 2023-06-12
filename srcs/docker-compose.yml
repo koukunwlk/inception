@@ -1,0 +1,59 @@
+services:
+  nginx:
+    build: requirements/nginx
+    image: nginx:1.0
+    container_name: nginx
+    ports:
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN}
+    networks:
+      - inception
+    volumes:
+      - "${WORDPRESS_HOST_VOLUME_PATH}:/var/www/html/"
+
+  wordpress:
+    build: requirements/wordpress
+    image: wordpress:1.0
+    container_name: wordpress
+    environment:
+      DOMAIN: ${DOMAIN}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_ROOT_HOST: ${MARIADB_ROOT_HOST}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      WP_TITLE: ${WP_TITLE}
+      WP_ADMIN_USR: ${WP_ADMIN_USR}
+      WP_ADMIN_PWD: ${WP_ADMIN_PWD}
+      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
+      WP_USR: ${WP_USR}
+      WP_PWD: ${WP_PWD}
+      WP_EMAIL: ${WP_EMAIL}
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    volumes:
+      - "${WORDPRESS_HOST_VOLUME_PATH}:/var/www/html/"
+    restart: always
+
+  mariadb:
+    build: requirements/mariadb
+    image: mariadb:10.1
+    container_name: mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    volumes:
+      - "${MARIADB_HOST_VOLUME_PATH}:/var/lib/mysql"
+    networks:
+      - inception
+    restart: always
+
+networks:
+  inception:
+    driver: bridge
+    name: inception
