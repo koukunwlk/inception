@@ -1,3 +1,5 @@
+version: "3.0"
+
 services:
   nginx:
     build: requirements/nginx
@@ -10,7 +12,7 @@ services:
     networks:
       - inception
     volumes:
-      - "${WORDPRESS_HOST_VOLUME_PATH}:/var/www/html/"
+      - wordpress:/var/www/html
 
   wordpress:
     build: requirements/wordpress
@@ -35,7 +37,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - "${WORDPRESS_HOST_VOLUME_PATH}:/var/www/html/"
+      - wordpress:/var/www/html
     restart: always
 
   mariadb:
@@ -48,10 +50,24 @@ services:
       MARIADB_USER: ${MARIADB_USER}
       MARIADB_PASSWORD: ${MARIADB_PASSWORD}
     volumes:
-      - "${MARIADB_HOST_VOLUME_PATH}:/var/lib/mysql"
+      - mariadb:/var/lib/mysql
     networks:
       - inception
     restart: always
+
+volumes:
+  wordpress:
+    driver: local
+    driver_opts:
+      type: volume
+      o: bind
+      device: /home/mamaro-d/data/wordpress
+  mariadb:
+    driver: local
+    driver_opts:
+      type: volume
+      o: bind
+      device: /home/mamaro-d/data/mariadb
 
 networks:
   inception:
