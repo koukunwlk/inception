@@ -13,6 +13,7 @@ services:
       - inception
     volumes:
       - wordpress:/var/www/html
+    restart: always
 
   wordpress:
     build: requirements/wordpress
