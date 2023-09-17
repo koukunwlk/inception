@@ -13,6 +13,8 @@ services:
       - inception
     volumes:
       - wordpress:/var/www/html
+    depends_on:
+      - wordpress
     restart: always
 
   wordpress:

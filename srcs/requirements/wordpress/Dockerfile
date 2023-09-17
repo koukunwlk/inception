@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
 RUN apt-get update -y && \
-    apt-get install -y php7.4-fpm php-pear php-cgi php-common php-zip php-mbstring php-net-socket php-gd php-xml-util php-mysql php-php-gettext php-bcmath wget mariadb-client mariadb-server sendmail
+    apt-get install -y software-properties-common && apt-get install -y php7.4-fpm php-pear php-cgi php-common php-zip php-mbstring php-net-socket php-gd php-xml-util php-mysql php-php-gettext php-bcmath wget mariadb-client mariadb-server
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
     chmod +x wp-cli.phar && \
